@@ -3,3 +3,6 @@
 
 #Virtual Environments
 venv
+
+#Twitter Configuration File
+config.py
