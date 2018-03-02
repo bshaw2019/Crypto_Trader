@@ -1,3 +1,4 @@
+import os
 import ccxt
 import time
 import datetime
@@ -9,6 +10,12 @@ import plotly.graph_objs as go
 import threading
 import dataset
 from collections import deque
+
+
+def ensure_dir(directory):
+    """"""
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 
 class CryptoDataGrabber(object):
@@ -24,6 +31,7 @@ class CryptoDataGrabber(object):
         self.deques = dict()
         self.ohlcv = dict()
         self.database = dataset.connect(self.db_url)
+        ensure_dir('databases')
         for symbol in self.symbols:
             if self.exchange.has['fetchOHLCV']:
                 print('Obtaining OHLCV data')
