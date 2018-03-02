@@ -19,14 +19,15 @@ class CryptoDataGrabber(object):
         self.exchange.load_markets()
         self.delay_seconds = self.exchange.rateLimit / 1000
         self.symbols = self.exchange.markets
+        self.timeframe = '1d'
         self.db_url = 'sqlite:///databases/market_prices.db'
         self.deques = dict()
         self.ohlcv = dict()
         self.database = dataset.connect(self.db_url)
         for symbol in self.symbols:
-            if self.exchange.has:
+            if self.exchange.has['fetchOHLCV']:
                 print('Obtaining OHLCV data')
-                data = self.exchange.fetch_ohlcv(symbol, '1d')
+                data = self.exchange.fetch_ohlcv(symbol, self.timeframe)
                 data = list(zip(*data))
                 data[0] = [datetime.datetime.fromtimestamp(ms / 1000)
                            for ms in data[0]]
@@ -155,7 +156,7 @@ app.css.append_css({
 })
 
 
-@app.callback(Output('h1_title', 'title'),
+@app.callback(Output('h1_title', 'children'),
               [Input('symbol-dropdown', 'value')])
 def change_plot(value):
     global selected_dropdown_value
