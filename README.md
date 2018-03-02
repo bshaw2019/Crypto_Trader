@@ -1,5 +1,5 @@
 # Crypto_Trader
-**An Automated Machine-Learning Based Cryptocurrency Trader for the GDAX Exchange**
+**A Live Machine-Learning based Cryptocurrency Trader for the Poloniex Exchange**
 
 The goal of the project is to create an open sourced, machine learning based cryptocurrency portfolio optimizer including as many relevant variables as possible. 
 
