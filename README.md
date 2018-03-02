@@ -32,3 +32,16 @@ Ultimately, the program will have the ability to be run 24 hours a day while opt
 | Binary Classifers     | Score Trading Pairs Live |
 | Q-Learning Bot        | Optimize Trade Strategy  |
 | Poloniex API Link     | Allow Bot to Make Trades |
+
+
+
+If you would like to donate to the project, please do so at the following Bitcoin/Litecoin/Ethereum addresses. All donations appreciated :)
+
+**DONATIONS**
+
+| Currency |                  Address                   |
+| -------- |:-----------------------------------------: |
+| Bitcoin  |     1GjVgMUDfKHzhxgeauRagVfp1GCrSJXijb     |
+| Litecoin | 0x9852389Bd431A90A9AEcb48EdA50Da1ac05Bd4d8 |
+| Ethereum |     M9oJaUnCB6Soistk3wSETziFDzz8gAaJCU     |
+    
