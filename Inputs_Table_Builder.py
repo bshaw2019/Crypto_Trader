@@ -4,25 +4,15 @@ import numpy as np
 
 ########################################OHLCV#######################################
 #Connects to the scraped Database saves in the "databases" subdirectory
-db = sqlite3.connect('databases/market_prices.db')
-cursor = db.cursor()
-
-#Querying the ETH/BTC Table from the database
-cursor.execute("SELECT * FROM 'ETH" + "/" + "BTC';")
-alist = cursor.fetchall()
-
-#Pulls column names for the ETH/BTC table
-cursor.execute("PRAGMA table_info('ETH" + "/" + "BTC');")
-col_names = cursor.fetchall()
-
-#Converting ETH/BTC data to a numpy array 
 table_names = {}
-data = np.array(alist)
+db_connection = sqlite3.connect('databases/market_prices.db')
+# TO DO: loop through tables
+df = pd.read_sql(r"SELECT * FROM 'ETH/BTC'", con=db_connection)
 
-#To Do: Make a loop that creates numpy arrays for all pairs
-#Name them according to the pair name (Ex. ETH_BTC) so they can be called later by symbol 
+table_names['ETH/BTC'] = df
 
-
+print(df.head())
+print(df.columns)
 
 from Variable_Functions import Twitter_Scanner
 
