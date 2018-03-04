@@ -1,50 +1,45 @@
 import sqlite3
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta
+from Variable_Functions.Twitter_Sentiment import dates_to_sentiment
 
-########################################OHLCV#######################################
-#Connects to the scraped Database saves in the "databases" subdirectory
-table_names = {}
+
 db_connection = sqlite3.connect('databases/market_prices.db')
-# TO DO: loop through tables
-df = pd.read_sql(r"SELECT * FROM 'ETH/BTC'", con=db_connection)
 
-table_names['ETH/BTC'] = df
 
-print(df.head())
-print(df.columns)
+######################################## Bid Ask Spread Time #######################################
+def OLHCV_From_DB(symbol):
+	df = pd.read_sql(r"SELECT * FROM '" + symbol + "'", con=db_connection)
+	return df
 
-from Variable_Functions import Twitter_Scanner
 
-#########################################TWITTER SENTIMENT##########################
-# creating object of TwitterClient Class
-api = Twitter_Scanner.TwitterClient()
+######################################### Twitter Sentiment ##########################
+def twitter_sentiment(symbol, max_tweets):
 
-# calling function to get tweets
-tweets = api.get_tweets(query = "\"BTC/USDT\"", count = 200)
+	now = datetime.now() 
+	dates = [now.strftime("%Y-%m-%d")]
+	sentiment_variables = dates_to_sentiment(dates, symbol, max_tweets)
+	return sentiment_variables
 
-# picking positive tweets from tweets
-ptweets = [tweet for tweet in tweets if tweet['sentiment'] > 0]
 
-# percentage of positive tweets
-print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
 
-# picking negative tweets from tweets
-ntweets = [tweet for tweet in tweets if tweet['sentiment'] < 0]
 
-# percentage of negative tweets
-print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
 
-# percentage of neutral tweets
-print("Neutral tweets percentage: {} % \
-    ".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets)))
+table_names = {}
+symbols = ['ETH/BTC', 'LTC/BTC']
 
-# printing first 5 positive tweets
-print("\n\nPositive tweets:")
-for tweet in ptweets[:10]:
-    print(tweet['text'])
+for symbol in symbols:
+	table_names[symbol] = OLHCV_From_DB(symbol)
 
-# printing first 5 negative tweets
-print("\n\nNegative tweets:")
-for tweet in ntweets[:10]:
-    print(tweet['text'])
+for symbol in symbols:
+	sentiment_variables = twitter_sentiment(symbol, 100)
+	table_names[symbol]['Tweet_Sentiment_Polarity'] = sentiment_variables[0]
+	table_names[symbol]['Tweet_Sentiment_Subjectivity'] = sentiment_variables[1]
+	table_names[symbol]['Tweet_Positive_Percent'] = sentiment_variables[2]
+	table_names[symbol]['Tweet_Sentiment_STDDEV'] = sentiment_variables[3]
+
+for symbol in symbols:
+	print(symbol)
+	print(table_names[symbol])
+
