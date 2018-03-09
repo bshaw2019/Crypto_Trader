@@ -4,8 +4,10 @@ import numpy as np
 from datetime import datetime, timedelta
 from Variable_Functions.Twitter_Sentiment import dates_to_sentiment
 from crycompare import *
+import subprocess
 
 
+p = subprocess.call("python Data_Grabber.py", shell=True)
 
 def db_connection(database):
     """"""
@@ -66,7 +68,6 @@ def generate_input_dataset(database):
 
     for symbol in symbols:
         table_names[symbol] = OLHCV_From_DB(symbol, database)
-
     for symbol in symbols:
         sentiment_variables = twitter_sentiment(symbol, 50)
         table_names[symbol]['Tweet_Sentiment_Polarity'] = sentiment_variables[0]

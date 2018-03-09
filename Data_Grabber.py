@@ -288,3 +288,6 @@ def update_spread_hist():
 
 if __name__ == '__main__':
     app.run_server()
+    print(self.server)
+
+
