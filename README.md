@@ -1,6 +1,9 @@
 # Crypto_Trader
 **A Live Machine-Learning based Cryptocurrency Trader for the Poloniex Exchange**
 
+If you would like to follow our progress or reach out to developers, feed free to join our discord channel at:
+https://discord.gg/UPNV2fH
+
 The goal of the project is to create an open sourced, machine learning based cryptocurrency portfolio optimizer including as many relevant variables as possible. 
 
 These will include:
