@@ -5,7 +5,11 @@ from datetime import datetime, timedelta
 from Variable_Functions.Twitter_Sentiment import dates_to_sentiment
 from crycompare import *
 import subprocess
-
+from time import strftime, gmtime
+import time
+import datetime
+import arrow
+from termcolor import colored
 
 
 
@@ -41,10 +45,17 @@ def OLHCV_From_DB(symbol, database):
 ######################################### Twitter Sentiment #######################################
 def twitter_sentiment(symbol, max_tweets):
     """"""
-    now = datetime.now()
-    dates = [now.strftime("%Y-%m-%d")]
+    
+    now = arrow.now()
+    dates = now.date()
+    print(dates)
+
+    time = now.time()
+    print(time)
     sentiment_variables = dates_to_sentiment(dates, symbol, max_tweets)
     return sentiment_variables
+
+
 
 
 ######################################### Split Trading Pair into 'to' and 'from' ###########
@@ -67,15 +78,29 @@ def generate_input_dataset(database):
     """"""
     symbols = get_symbols(database)
     table_names = {}
-
+    start_time = time.time()
+    total_runtime = time.time() - start_time
     for symbol in symbols:
         table_names[symbol] = OLHCV_From_DB(symbol, database)
     i = len(symbols)
+    total_symbols = len(symbols)
     for symbol in symbols:
+        print('')
         print(str(i) + " More Symbols to Pull Sentiment For")
+        print('')
+        total_runtime += (time.time() - start_time) - total_runtime
+        average_runtime = round(( total_runtime / ((total_symbols+1) - i)), 2)
+        print('')
+        print(colored("Total Runtime = " + str(round((total_runtime / 60), 2)) + " minutes", 'blue'))
+        print('')
+        print(colored("Average seconds per symbol = " + str(average_runtime) + " seconds", 'blue'))
+        print('')
+        print(colored("Estimated seconds until last sentiment = " + (str(average_runtime * i) + " seconds remaining"), 'blue'))
+        print('')
+        print('')
         i -= 1
         sentiment_variables = twitter_sentiment(symbol, 1)
-        print()
+        
         table_names[symbol]['Tweet_Sentiment_Polarity'] = sentiment_variables[0]
         table_names[symbol]['Tweet_Sentiment_Subjectivity'] = sentiment_variables[1]
         table_names[symbol]['Tweet_Positive_Percent'] = sentiment_variables[2]
@@ -88,7 +113,7 @@ def generate_input_dataset(database):
         table_names[symbol]['Tweet_Sentiment_Subjectivity_from'] = sentiment_variables[9]
         table_names[symbol]['Tweet_Positive_Percent_from'] = sentiment_variables[10]
         table_names[symbol]['Tweet_Sentiment_STDDEV_from'] = sentiment_variables[11]
-
+    print(table_names)
     return table_names
 
 
